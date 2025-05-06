@@ -3,6 +3,7 @@ import postModel from "../Models/blogpostschema.js"
 import cloudUploader from "../cloud/cloudinary.js";
 
 
+
 const router = express.Router()
 
 
@@ -112,6 +113,32 @@ router.post("/:id", async (req, res) => {
     }
   });
 
+
+router.get("/:id/comments", async (req, res) => {
+    const blogPostId = req.params.id
+    try{
+      const blogPost = await postModel.findById(blogPostId)
+      res.json(blogPost.comments)
+    }
+    catch(err){
+      res.status(500).json({error: err.message})
+    }
+})
+
+
+router.get("/:id/comments/:commentId", async (req, res) => {
+  const blogPostId = req.params.id
+  const commentId = req.params.commentId
+  try{
+    const blogPost = await postModel.findById(blogPostId)
+    const comment = blogPost.comments.find( comment => comment._id == commentId)
+    res.json(comment)
+  
+  }
+  catch(err){
+    res.status(500).json({error: err.message})
+  }
+})
 
 
 
