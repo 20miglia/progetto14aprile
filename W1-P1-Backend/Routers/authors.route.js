@@ -1,15 +1,26 @@
 import express from "express";
 import userModel from "../Models/authorschema.js";
+import cloudUploader from "../cloud/cloudinary.js";
 
 const router = express.Router()
 
 
 
-
-router.get("/", async (req, res) =>{
-    const authors = await userModel.find()
-    res.json(authors)
+router.get("/", async (req, res) =>{  
+    const size = req.query.size;
+    const skip = (req.query.page-1) * size; 
+    const prop = req.query.prop;
+        
+    try{
+    const filterUser = await userModel.find().limit(size).skip(skip)
+    res.status(200).json(filterUser)
+    }
+    catch(err){
+        res.status(500).json({message: "Errore nel recupero degli autori"})
+    }
  })
+
+ //.sort({[prop]:1})
  
  
  router.get("/:id", async (req, res) =>{
@@ -56,4 +67,38 @@ router.get("/", async (req, res) =>{
      }
  })
 
- export default router
+ 
+// PATCH: Route per il caricamento dell'immagine dell'autore
+
+router.patch("/:authorId/avatar", cloudUploader.single("avatar"), async(req,res,next)=>{
+
+        try{
+
+              const authorId = req.params.authorId
+              const updateAuthor = await userModel.findByIdAndUpdate(
+                authorId,
+                {avatar: req.file.path},
+                {new: true}
+
+             )
+
+           
+
+             res.status(200).json(updateAuthor)
+
+         }
+
+          catch(err){
+             res.json({error: err.message})
+         }
+
+
+    }
+
+)
+
+
+
+
+
+export default router

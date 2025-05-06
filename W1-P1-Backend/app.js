@@ -1,11 +1,11 @@
 import express from "express";  //Importo Express
 const app = express();           //Creo un'applicazione Express
 import "dotenv/config";
-import mongoose from "mongoose"; //Importo Mongoose
 import cors from "cors"
 import start from "./db.js";
 import authorsRouter from './Routers/authors.route.js'
 import postsRouter from './Routers/posts.route.js'
+
 
 
 // Middleware
