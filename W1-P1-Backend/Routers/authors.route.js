@@ -1,6 +1,7 @@
 import express from "express";
 import userModel from "../Models/authorschema.js";
 import cloudUploader from "../cloud/cloudinary.js";
+import { authMiddleware } from '../middlewares/auth.js'
 
 const router = express.Router()
 

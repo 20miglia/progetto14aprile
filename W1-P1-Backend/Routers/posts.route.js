@@ -141,7 +141,48 @@ router.get("/:id/comments/:commentId", async (req, res) => {
 })
 
 
+router.put("/:id/comments/:commentId", async (req, res) => {
+  const blogPostId = req.params.id
+  const commentId = req.params.commentId
+  try{
+    const blogPost = await postModel.findById(blogPostId);
+    if (!blogPost) {
+      return res.status(404).send("Post non trovato");
+    }
+    const comment = blogPost.comments.find( comment => comment._id == commentId)
+    blogPost.comments[comment] = {
+      ...blogPost.comments[comment],
+      ...req.body
+    };
+    await blogPost.save();
+    res.json(blogPost.comments[comment])
+   }
+   catch(err){
+    res.status(500).json({error: err.message})
+  }
 
+})
+
+
+router.delete("/:id/comments/:commentId", async (req, res) => {
+  const blogPostId = req.params.id
+  const commentId = req.params.commentId
+  try {
+    const blogPost = await postModel.findById(blogPostId);
+    if (!blogPost) {
+      return res.status(404).send("Post non trovato");
+    }
+
+    blogPost.comments = blogPost.comments.filter(
+      comment => comment._id !== commentId
+    );
+    await blogPost.save();
+
+    res.json({ message: "Commento eliminato con successo" });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
 
 
