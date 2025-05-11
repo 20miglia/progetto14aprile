@@ -3,6 +3,7 @@ import userModel from "../Models/authorschema.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import "dotenv/config"
+import passport from "passport";
 
 
 const saltRounds = +process.env.SALT_ROUNDS // numero di cicli per la generazione dell'hash della password
@@ -57,6 +58,31 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: error.message })
     } 
 })
+
+
+
+// Google Auth Route 
+router.get('/googlelogin', passport.authenticate("google", {scope: ["profile", "email"]}));
+
+
+router.get('/google/callback', 
+    passport.authenticate("google", {session: false, failureRedirect: '/login'} ), async (req, res, next) => {
+    try {
+            res.redirect('/')
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+    })
+
+
+
+
+
+
+
+
+
 
 
 

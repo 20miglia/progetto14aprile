@@ -31,13 +31,14 @@ const authMiddleware = async (req, res, next) => {
         } 
         
     } catch(err) {
+        console.log(err)
         next('Token error!!')
     }
 }
 
 const verifyJWT = (token) => {
     return new Promise((res, rej) => {
-        jwt.verify(token, jwtSecretKey, (err, data) => {
+        jwt.verify(token, jwtsecretkey, (err, data) => {
             if(err) res(err)
             else res(data)
         })

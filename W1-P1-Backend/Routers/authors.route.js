@@ -13,7 +13,18 @@ router.get("/", async (req, res) =>{
     const prop = req.query.prop;
         
     try{
-    const filterUser = await userModel.find().limit(size).skip(skip)
+    //const filterUser = await userModel.find().limit(size).skip(skip)
+    const userQuery = userModel.find();
+    if (size > 0){
+        userQuery.limit(size)
+        if(page > 0){
+            userQuery.skip(skip)
+        }
+    }
+    if(prop){
+        userQuery.sort({[prop]:1})
+    }
+    const filterUser = await userQuery
     res.status(200).json(filterUser)
     }
     catch(err){

@@ -149,13 +149,13 @@ router.put("/:id/comments/:commentId", async (req, res) => {
     if (!blogPost) {
       return res.status(404).send("Post non trovato");
     }
-    const comment = blogPost.comments.find( comment => comment._id == commentId)
-    blogPost.comments[comment] = {
-      ...blogPost.comments[comment],
+    const commentIndex = blogPost.comments.findIndex( comment => comment._id == commentId)
+    blogPost.comments[commentIndex] = {
+      ...blogPost.comments[commentIndex],
       ...req.body
     };
-    await blogPost.save();
-    res.json(blogPost.comments[comment])
+    const set = await blogPost.save();
+    res.json(set.comments[commentIndex])
    }
    catch(err){
     res.status(500).json({error: err.message})
@@ -174,7 +174,7 @@ router.delete("/:id/comments/:commentId", async (req, res) => {
     }
 
     blogPost.comments = blogPost.comments.filter(
-      comment => comment._id !== commentId
+      comment => comment._id != commentId
     );
     await blogPost.save();
 

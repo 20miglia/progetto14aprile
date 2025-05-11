@@ -7,6 +7,9 @@ import authorsRouter from './Routers/authors.route.js'
 import postsRouter from './Routers/posts.route.js'
 import authRouter from './Routers/auth.route.js'
 import usersRouter from './Routers/users.route.js'
+import passport from "passport";
+import googleStrategy from './middlewares/oauthmiddleware.js'
+
 
 
 
@@ -17,6 +20,7 @@ app.use('/authors', authorsRouter)
 app.use('/blogPosts', postsRouter)
 app.use('/auth', authRouter)
 app.use('/users', usersRouter)
+passport.use('google', googleStrategy)
 
 // Connessione al DB
 start();
