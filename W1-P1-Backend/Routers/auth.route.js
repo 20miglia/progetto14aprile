@@ -68,7 +68,7 @@ router.get('/googlelogin', passport.authenticate("google", {scope: ["profile", "
 router.get('/google/callback', 
     passport.authenticate("google", {session: false, failureRedirect: '/login'} ), async (req, res, next) => {
     try {
-            res.redirect('/')
+            res.redirect('https://m6-react-vercel.vercel.app/home')
         } catch (error) {
             console.log(error)
             next(error)
